@@ -1,0 +1,4 @@
+namespace HomeEnergyApi.Models
+{
+
+}
