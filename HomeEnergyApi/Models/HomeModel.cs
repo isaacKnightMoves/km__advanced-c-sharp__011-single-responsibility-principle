@@ -21,5 +21,10 @@ namespace HomeEnergyApi.Models
             City = city;
             MonthlyElectricUsage = monthlyElectricUsage;
         }
+
+        internal static void Add(Home newHome)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

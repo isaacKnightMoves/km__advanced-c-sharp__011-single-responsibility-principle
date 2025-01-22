@@ -7,22 +7,22 @@ namespace HomeEnergyUsageApi.Controllers
     [Route("[controller]")]
     public class HomesController : ControllerBase
     {
-        private static List<Home> homesList = new List<Home>();
+        private static HomeRepository repository = new HomeRepository();
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(homesList);
+            return Ok(repository.FindAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult FindById(int id)
 
         {
-            Home foundHome = homesList[id];
+            Home foundHome = repository.FindById(id);
             if (foundHome != null)
             {
-                return Ok(homesList[id]);
+                return Ok(repository.FindById(id));
             }
             else
             {
@@ -33,18 +33,18 @@ namespace HomeEnergyUsageApi.Controllers
         [HttpPost]
         public IActionResult CreateHome([FromBody] Home home)
         {
-            homesList.Add(home);
-            return Created($"/Homes/{homesList.Count - 1}", home);
+            repository.Save(home);
+            return Created($"/Homes/{repository.FindAll().Count - 1}", home);
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateHome([FromBody] Home newHome, [FromRoute] int id)
         {
-            Home homeToUpdate = homesList[id];
+            Home homeToUpdate = repository.FindById(id);
             if (homeToUpdate != null)
             {
-                homesList[id] = newHome;
-                return Ok(homesList[id]);
+                repository.Update(id, newHome);
+                return Ok(repository.FindById(id));
             }
             else
             {
@@ -55,11 +55,11 @@ namespace HomeEnergyUsageApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteHome(int id)
         {
-            Home homeToDelete = homesList[id];
+            Home homeToDelete = repository.FindById(id);
 
             if (homeToDelete != null)
             {
-                homesList.Remove(homeToDelete);
+                repository.RemoveById(id);
                 return Ok(homeToDelete);
             }
             else
